@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, request
 import psycopg2
+import os
+from dotenv import load_dotenv
+
 app = Flask(__name__)
 
 @app.after_request
@@ -8,12 +11,20 @@ def after_request(response):
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
+
+load_dotenv()
+
+database = os.environ.get("database")
+user = os.environ.get("user")
+password = os.environ.get("password")
+
 def get_db():
+
     return psycopg2.connect(
         host='localhost',
-        database='mishutka', 
-        user='mishutka',
-        password='mishutka'
+        database=database, 
+        user=user,
+        password=password
     )
 
 @app.route('/')
