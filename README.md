@@ -7,7 +7,7 @@
 2. Установка зависимостей:\
 ```pip install Flask```\
 ```pip install psycopg2```\
-``` pip install dotenv```
+```pip install dotenv```
 3. Запуск:\
 ```python3 app.py```
 ## Конфигурация
