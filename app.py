@@ -15,12 +15,13 @@ def after_request(response):
 load_dotenv()
 
 database = os.environ.get("database")
+host = os.environ.get("host")
 user = os.environ.get("user")
 password = os.environ.get("password")
 
 def get_db():
     return psycopg2.connect(
-        host='localhost',
+        host=host,
         database=database, 
         user=user,
         password=password
