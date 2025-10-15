@@ -36,7 +36,15 @@ def get_drinks():
     conn = get_db()
     cur = conn.cursor()
     
-    cur.execute("SELECT id, name, image FROM public.drinks")
+    categories = request.args.get('categories')
+    
+    if categories:
+        # Просто подставляем categories в SQL
+        query = f"SELECT id, name, image FROM public.drinks WHERE categories @> ARRAY[{categories}]::bigint[]"
+        cur.execute(query)
+    else:
+        cur.execute("SELECT id, name, image FROM public.drinks")
+    
     rows = cur.fetchall() 
 
     drinks = []
@@ -57,7 +65,14 @@ def get_food():
     conn = get_db()
     cur = conn.cursor()
     
-    cur.execute("SELECT id, name, image FROM public.food")
+    categories = request.args.get('categories')
+    
+    if categories:
+        query = f"SELECT id, name, image FROM public.food WHERE categories @> ARRAY[{categories}]::bigint[]"
+        cur.execute(query)
+    else:
+        cur.execute("SELECT id, name, image FROM public.food")
+    
     rows = cur.fetchall() 
 
     food = []
