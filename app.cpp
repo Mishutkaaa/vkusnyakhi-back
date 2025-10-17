@@ -32,6 +32,17 @@ int main() {
         return response;
     });
 
+    CROW_ROUTE(app, "/categories")([](){
+        crow::json::wvalue response;
+        // METHOD GET
+        // РУЧКА ДЛЯ ПОЛУЧАНИЯ КАТЕГОРИЙ, ОТДАЁМ ОТВЕТ В ВИДЕ 
+        // {
+        // "id":1, 
+        // "name":"name"
+        // }
+        return response;
+    });
+
     CROW_ROUTE(app, "/newProduct")([](){
         crow::json::wvalue response;
         // METHOD POST
