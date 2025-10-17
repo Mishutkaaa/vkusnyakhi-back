@@ -20,8 +20,7 @@ int main() {
         return response;
     });
 
-    CROW_ROUTE(app, "/food")
-    ([](){
+    CROW_ROUTE(app, "/food")([](){
         crow::json::wvalue response;
         // METHOD GET
         // РУЧКА ДЛЯ ПОЛУЧАНИЯ ЕДЫ, ОТДАЁМ ОТВЕТ В ВИДЕ 
@@ -34,6 +33,7 @@ int main() {
     });
 
     CROW_ROUTE(app, "/newProduct")([](){
+        crow::json::wvalue response;
         // METHOD POST
         // РУЧКА ДЛЯ СОЗДАНИЯ СУЩНОСТИ, ПРИНИМАЕМ ДАННЫЕ В ВИДЕ
         // {
@@ -41,7 +41,7 @@ int main() {
         // img: "фотка_продукта",
         // db: "имя_бд"
         // }
-        return
+        return response;
     });
 
     std::cout << "=== C++ Backend Server ===" << std::endl;
