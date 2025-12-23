@@ -66,7 +66,7 @@ func main() {
 		rows, err := db.Query("select id, name, image, categories, brand from food")
 		if err != nil {
 			log.Println(err)
-			http.Error(w, "cannot get drinks", http.StatusInternalServerError)
+			http.Error(w, "cannot get food", http.StatusInternalServerError)
 			return
 		}
 		defer rows.Close()
@@ -82,7 +82,7 @@ func main() {
 	})
 
 	http.HandleFunc("/categories", func(w http.ResponseWriter, r *http.Request) {
-		var foods []models.Food
+		var categories []models.Categories
 
 		table := r.URL.Query().Get("type")
 
@@ -93,20 +93,46 @@ func main() {
 		rows, err := db.Query("select id, name from categories where type = $1", table)
 		if err != nil {
 			log.Println(err)
-			http.Error(w, "cannot get drinks", http.StatusInternalServerError)
+			http.Error(w, "cannot get categories", http.StatusInternalServerError)
 			return
 		}
 		defer rows.Close()
 		for rows.Next() {
-			food := models.Food{}
-			if err := rows.Scan(&food.ID, &food.Name, &food.Image, &food.Category, &food.Brand); err != nil {
+			category := models.Categories{}
+			if err := rows.Scan(&category.ID, &category.Name); err != nil {
 				log.Println("scan err", err)
 				return
 			}
-			foods = append(foods, food)
+			categories = append(categories, category)
 		}
-		json.NewEncoder(w).Encode(foods)
+		json.NewEncoder(w).Encode(categories)
 	})
+
+	http.HandleFunc("/brand", func(w http.ResponseWriter, r *http.Request) {
+		var brands []models.Brand
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		rows, err := db.Query("select id, name from brand")
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "cannot get brand", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+		for rows.Next() {
+			brand := models.Brand{}
+			if err := rows.Scan(&brand.ID, &brand.Name); err != nil {
+				log.Println("scan err", err)
+				return
+			}
+			brands = append(brands, brand)
+		}
+		json.NewEncoder(w).Encode(brands)
+	})
+
 	addr := ":" + port
 	http.ListenAndServe(addr, nil)
 }
