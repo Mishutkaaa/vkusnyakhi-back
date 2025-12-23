@@ -90,7 +90,7 @@ func main() {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
-		rows, err := db.Query("select id, name from categories where type = $1", table)
+		rows, err := db.Query("select id, name from categories where type =$ 1 or type ='any'", table)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "cannot get categories", http.StatusInternalServerError)
@@ -111,11 +111,13 @@ func main() {
 	http.HandleFunc("/brand", func(w http.ResponseWriter, r *http.Request) {
 		var brands []models.Brand
 
+		table := r.URL.Query().Get("type")
+
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
-		rows, err := db.Query("select id, name from brand")
+		rows, err := db.Query("select id, name from brand where type = $1 or type = 'any'", table)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "cannot get brand", http.StatusInternalServerError)
