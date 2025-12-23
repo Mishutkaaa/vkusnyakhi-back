@@ -45,7 +45,7 @@ type Food struct {
 type Categories struct {
 	ID    int 
 	Name  string
-	table string
+	Table string
 }
 ```
 ### Brand
