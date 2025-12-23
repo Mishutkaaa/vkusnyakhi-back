@@ -7,4 +7,3 @@ type Drinks struct {
 	Category *[]int  `json:"category,omitempty"`
 	Brand    *string `json:"brand,omitempty"`
 }
- 

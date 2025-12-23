@@ -1,7 +1,7 @@
 package models
 
 type Categories struct {
-	ID    int
-	Name  string
-	Table string
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Table string `json:"table"`
 }
