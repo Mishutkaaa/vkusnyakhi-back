@@ -39,7 +39,21 @@ type Food struct {
 	Category *[]int  `json:"category,omitempty"`
 	Brand    *string `json:"brand,omitempty"`
 }
-
+```
+### Categories
+```go
+type Categories struct {
+	ID    int 
+	Name  string
+	table string
+}
+```
+### Brand
+```go
+type Brand struct {
+	ID   int
+	Name string
+}
 ```
 ## Зависимости 
 
