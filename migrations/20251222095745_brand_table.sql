@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table brand(
-id int not null,
+id serial not null,
 name text,
 primary key(id)
 );

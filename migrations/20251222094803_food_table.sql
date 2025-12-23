@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table food(
-id int not null,
+id serial not null,
 name text,
 image text,
 categories int[],
