@@ -3,9 +3,11 @@ package main
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"vkusnyakhi-back/config"
 	"vkusnyakhi-back/models"
 
@@ -33,12 +35,27 @@ func main() {
 
 	http.HandleFunc("/drinks", func(w http.ResponseWriter, r *http.Request) {
 		var drinks []models.Drinks
+		var query string = "select id, name, image from drinks"
+		var where []string
 
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
-		rows, err := db.Query("select id, name, image, categories, brand from drinks")
+		categories := r.URL.Query().Get("categories")
+		brand := r.URL.Query().Get("brand")
+
+		if categories != "" {
+			where = append(where, fmt.Sprintf(" categories @> array [%s]", categories))
+		}
+		if brand != "" {
+			where = append(where, fmt.Sprintf( "brand = %s", brand))
+		}
+		if len(where) != 0 {
+			query += " where " + strings.Join(where, "and")
+		}
+		log.Println(query)
+		rows, err := db.Query(query)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "cannot get drinks", http.StatusInternalServerError)
@@ -47,7 +64,7 @@ func main() {
 		defer rows.Close()
 		for rows.Next() {
 			drink := models.Drinks{}
-			if err := rows.Scan(&drink.ID, &drink.Name, &drink.Image, &drink.Category, &drink.Brand); err != nil {
+			if err := rows.Scan(&drink.ID, &drink.Name, &drink.Image); err != nil {
 				log.Println("scan err", err)
 				return
 			}
@@ -63,7 +80,7 @@ func main() {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
-		rows, err := db.Query("select id, name, image, categories, brand from food")
+		rows, err := db.Query("select id, name, image from food")
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "cannot get food", http.StatusInternalServerError)
@@ -72,7 +89,7 @@ func main() {
 		defer rows.Close()
 		for rows.Next() {
 			food := models.Food{}
-			if err := rows.Scan(&food.ID, &food.Name, &food.Image, &food.Category, &food.Brand); err != nil {
+			if err := rows.Scan(&food.ID, &food.Name, &food.Image); err != nil {
 				log.Println("scan err", err)
 				return
 			}
@@ -90,7 +107,7 @@ func main() {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
 
-		rows, err := db.Query("select id, name from categories where type =$ 1 or type ='any'", table)
+		rows, err := db.Query("select id, name from categories where type =$1 or type ='any'", table)
 		if err != nil {
 			log.Println(err)
 			http.Error(w, "cannot get categories", http.StatusInternalServerError)
