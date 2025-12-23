@@ -35,6 +35,9 @@ func main() {
 		var drinks []models.Drinks
 
 		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
 		rows, err := db.Query("select id, name, image, categories, brand from drinks")
 		if err != nil {
 			log.Println(err)
@@ -51,6 +54,58 @@ func main() {
 			drinks = append(drinks, drink)
 		}
 		json.NewEncoder(w).Encode(drinks)
+	})
+
+	http.HandleFunc("/food", func(w http.ResponseWriter, r *http.Request) {
+		var foods []models.Food
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		rows, err := db.Query("select id, name, image, categories, brand from food")
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "cannot get drinks", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+		for rows.Next() {
+			food := models.Food{}
+			if err := rows.Scan(&food.ID, &food.Name, &food.Image, &food.Category, &food.Brand); err != nil {
+				log.Println("scan err", err)
+				return
+			}
+			foods = append(foods, food)
+		}
+		json.NewEncoder(w).Encode(foods)
+	})
+
+	http.HandleFunc("/categories", func(w http.ResponseWriter, r *http.Request) {
+		var foods []models.Food
+
+		table := r.URL.Query().Get("type")
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		rows, err := db.Query("select id, name from categories where type = $1", table)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "cannot get drinks", http.StatusInternalServerError)
+			return
+		}
+		defer rows.Close()
+		for rows.Next() {
+			food := models.Food{}
+			if err := rows.Scan(&food.ID, &food.Name, &food.Image, &food.Category, &food.Brand); err != nil {
+				log.Println("scan err", err)
+				return
+			}
+			foods = append(foods, food)
+		}
+		json.NewEncoder(w).Encode(foods)
 	})
 	addr := ":" + port
 	http.ListenAndServe(addr, nil)

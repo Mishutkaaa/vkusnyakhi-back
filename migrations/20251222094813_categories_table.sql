@@ -3,6 +3,7 @@
 create table categories(
 id int not null,
 name text,
+type text,
 primary key(id)
 );
 -- +goose StatementEnd
