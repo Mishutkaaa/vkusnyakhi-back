@@ -21,9 +21,13 @@
 ## Миграции
 
 Для поднятия миграций необходимо ввести команду:\
-```go tool goose postgres "СТРОКА_ПОДКЛЮЧЕНИЯ_К_БД" up -dir migrations```\
+```
+go tool goose postgres "СТРОКА_ПОДКЛЮЧЕНИЯ_К_БД" up -dir migrations
+```\
 Для отката миграций необходимо ввести команду:\
-```go tool goose postgres "СТРОКА_ПОДКЛЮЧЕНИЯ_К_БД" down -dir migrations```
+```
+go tool goose postgres "СТРОКА_ПОДКЛЮЧЕНИЯ_К_БД" down -dir migrations
+```
 
 ## Модели
 
