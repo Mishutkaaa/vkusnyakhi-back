@@ -13,7 +13,7 @@ import (
 func GetDrinks(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var drinks []models.Drinks
-		var query string = "select id, name, image from drinks"
+		var query string = "select id, name, image, categories, brand from drinks"
 		var where []string
 
 		w.Header().Set("Content-Type", "application/json")
@@ -41,7 +41,7 @@ func GetDrinks(db *sql.DB) http.HandlerFunc {
 		defer rows.Close()
 		for rows.Next() {
 			drink := models.Drinks{}
-			if err := rows.Scan(&drink.ID, &drink.Name, &drink.Image); err != nil {
+			if err := rows.Scan(&drink.ID, &drink.Name, &drink.Image, &drink.Categories, &drink.Brand); err != nil {
 				log.Println("scan err", err)
 				return
 			}
