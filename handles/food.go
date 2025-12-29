@@ -78,3 +78,19 @@ func EditFood(db *sql.DB) http.HandlerFunc {
 		log.Println("всё ок")
 	}
 }
+
+func DeleteFood(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+		brand := r.PathValue("id")
+
+		if _, err := db.Exec("delete from food where id = $1", brand); err != nil {
+			log.Println("cannot delete food", err)
+			return
+		}
+
+	}
+}

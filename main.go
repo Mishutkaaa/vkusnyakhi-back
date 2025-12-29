@@ -36,6 +36,7 @@ func main() {
 
 	http.HandleFunc("/food", handles.GetFood(db))
 	http.HandleFunc("/editFood", handles.EditFood(db))
+	http.HandleFunc("/food/{id}", handles.DeleteFood(db))
 
 	http.HandleFunc("/categories", handles.GetCategories(db))
 	http.HandleFunc("/createCategories", handles.CreateCategories(db))
