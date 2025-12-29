@@ -42,6 +42,7 @@ func main() {
 	http.HandleFunc("/categories/{id}", handles.DeleteCategories(db))
 	http.HandleFunc("/createBrand", handles.CreateBrand(db))
 	http.HandleFunc("/editBrand", handles.EditBrand(db))
+	http.HandleFunc("/brand/{id}", handles.DeleteBrand(db))
 
 	addr := ":" + port
 	http.ListenAndServe(addr, nil)
