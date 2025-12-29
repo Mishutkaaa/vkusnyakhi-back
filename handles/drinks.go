@@ -77,3 +77,19 @@ func EditDrinks(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
+
+func DeleteDrinks(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+
+		brand := r.PathValue("id")
+
+		if _, err := db.Exec("delete from drinks where id = $1", brand); err != nil {
+			log.Println("cannot delete drinks", err)
+			return
+		}
+
+	}
+}
