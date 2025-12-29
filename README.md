@@ -56,7 +56,7 @@ type Food struct {
 type Categories struct {
 	ID    int    `json:"id"`
 	Name  string `json:"name"`
-	Table string `json:"table"`
+	Type string `json:"type"`
 }
 ```
 ### Brand
@@ -64,6 +64,7 @@ type Categories struct {
 type Brand struct {
 	ID   int    `json:"id"`
 	Name string `json:"name"`
+	Type string `json:"type"`
 }
 ```
 ### NewProduct
