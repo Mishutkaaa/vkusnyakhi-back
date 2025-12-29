@@ -53,7 +53,7 @@ func CreateCategories(db *sql.DB) http.HandlerFunc {
 		}
 
 		_, err := db.Exec("insert into categories (name, type) values ($1, $2)",
-			categories.Name, categories.Table)
+			categories.Name, categories.Type)
 		if err != nil {
 			log.Println("cannot edit food", err)
 			return
@@ -76,7 +76,7 @@ func EditCategories(db *sql.DB) http.HandlerFunc {
 		}
 
 		_, err := db.Exec("update categories set name = $1, type = $2 where id = $3",
-			categories.Name, categories.Table, categories.ID)
+			categories.Name, categories.Type, categories.ID)
 		if err != nil {
 			log.Println("cannot edit food", err)
 			return
