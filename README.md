@@ -54,16 +54,16 @@ type Food struct {
 ### Categories
 ```go
 type Categories struct {
-	ID    int 
-	Name  string
-	Table string
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Table string `json:"table"`
 }
 ```
 ### Brand
 ```go
 type Brand struct {
-	ID   int
-	Name string
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 ```
 ### NewProduct
