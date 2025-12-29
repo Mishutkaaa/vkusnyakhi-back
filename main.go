@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/categories", handles.GetCategories(db))
 	http.HandleFunc("/brand", handles.GetBrand(db))
 	http.HandleFunc("/newProduct", handles.CreateNewProduct(db))
+	http.HandleFunc("/editFood", handles.EditFood(db))
 
 	addr := ":" + port
 	http.ListenAndServe(addr, nil)
