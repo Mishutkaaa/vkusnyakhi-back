@@ -36,3 +36,26 @@ func GetBrand(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(brands)
 	}
 }
+
+func CreateBrand(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var brand models.Brand
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		if err := json.NewDecoder(r.Body).Decode(&brand); err != nil {
+			http.Error(w, "error decode json", http.StatusBadRequest)
+			log.Println(err)
+			return
+		}
+
+		_, err := db.Exec("insert into brand (name, type) values ($1, $2)",
+			brand.Name, brand.Type)
+		if err != nil {
+			log.Println("cannot create brand", err)
+			return
+		}
+	}
+}
