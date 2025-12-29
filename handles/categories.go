@@ -61,3 +61,25 @@ func CreateCategories(db *sql.DB) http.HandlerFunc {
 	}
 }
 
+func EditCategories(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var categories models.Categories
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		if err := json.NewDecoder(r.Body).Decode(&categories); err != nil {
+			http.Error(w, "error decode json", http.StatusBadRequest)
+			log.Println(err)
+			return
+		}
+
+		_, err := db.Exec("update categories set name = $1, type = $2 where id = $3",
+			categories.Name, categories.Table, categories.ID)
+		if err != nil {
+			log.Println("cannot edit food", err)
+			return
+		}
+	}
+}
