@@ -59,3 +59,27 @@ func CreateBrand(db *sql.DB) http.HandlerFunc {
 		}
 	}
 }
+
+func EditBrand(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var brand models.Brand
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+
+		if err := json.NewDecoder(r.Body).Decode(&brand); err != nil {
+			http.Error(w, "error decode json", http.StatusBadRequest)
+			log.Println(err)
+			return
+		}
+
+		_, err := db.Exec("update brand set name = $1, type = $2 where id = $3",
+			brand.Name, brand.Type, brand.ID)
+		if err != nil {
+			log.Println("cannot edit brand", err)
+			return
+		}
+	}
+}
+
